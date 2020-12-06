@@ -9,7 +9,7 @@ from ltspd.utils import (
     grouper,
     probability_series,
     random_string,
-    shuffle_second_axes,
+    shuffle_second_axis,
 )
 from ltspd.utils.generate import make_groups
 
@@ -51,10 +51,10 @@ def test_filter_second_axes(feature, expected):
 
 
 @pytest.mark.parametrize("n", range(1, 10))
-def test_shuffle_second_axes(n):
+def test_shuffle_second_axis(n):
     e = set(range(n))
     feature = list(list(range(n)) for _ in range(0, 5))
-    shuffle_second_axes(feature)
+    shuffle_second_axis(feature)
     for r in feature:
         assert not e - set(r)
 

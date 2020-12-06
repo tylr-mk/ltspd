@@ -9,7 +9,7 @@ is to manually edit them.
 from itertools import chain, islice
 
 from ltspd.rosters.decorators import retry_roster
-from ltspd.rosters.utils import grouper
+from ltspd.utils import grouper
 
 
 @retry_roster(use_exclusions=True)

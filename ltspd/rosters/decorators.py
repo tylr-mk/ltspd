@@ -53,9 +53,9 @@ def retry_roster(max_runs=10, use_exclusions=True):  # deteriorate=False, deteri
 
             # provide the set up for evaluating failure and retry
             # identify all excluded groups for this run
-            this_run["exclusions"] |= explode_subgroups(
+            this_run["exclusions"] |= set(explode_subgroups(
                 this_run["exclusions"], this_run.get("group_size")
-            )
+            ))
 
             runs = 0
             # deteriotation allows us to remove exclusion groups from the tail
@@ -130,9 +130,9 @@ def retry_group_roster(
 
             # provide the set up for evaluating failure and retry
             # identify all excluded groups for this run
-            this_run["exclusions"] |= explode_subgroups(
+            this_run["exclusions"] |= set(explode_subgroups(
                 this_run["exclusions"], this_run["group_size"]
-            )
+            ))
 
             runs = 0
             # deteriotation allows us to remove exclusion groups from the tail

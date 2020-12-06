@@ -40,7 +40,7 @@ def filter_second_axes(features, exclude):
     return (filter_axis(y, exclude) for y in features)
 
 
-def shuffle_second_axes(features):
+def shuffle_second_axis(features):
     """Performs an in place shuffle on each second axis in the participant
     groups. Which means the order is randomised.
 

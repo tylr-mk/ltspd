@@ -10,11 +10,11 @@ Explicit examples would be to evenly spread a senior team. Ensuring each team
 has the same probability of containing the same number of senior team members.
 In the case of a road biking trip, each sub group contains 2 less-able riders.
 """
-from itertools import chain, cycle, islice, tee
+from itertools import chain, cycle, islice, repeat, tee
 from math import floor
 
 from ltspd.rosters.decorators import retry_group_roster
-from ltspd.rosters.utils import grouper
+from ltspd.utils import grouper
 
 
 def _proportional_indices(lengths):
@@ -59,6 +59,32 @@ def _representational_indices(lengths, num_groups):
             yield i
 
 
+def _select_from_groups_gather_all(groups, indices, exhaust=None, output=None, total_size=None):
+    """Annoyingly UGLY... but it works for now SO...
+    """
+    total_size = sum([len(groups[g]) for g in set(indices)]) if total_size is None else total_size
+    exhaust = exhaust if exhaust else set()
+    output = output if output else []
+    if not indices or len(exhaust) == len(groups):
+        return []
+    spread_size = len(indices)
+    positional = cycle(range(spread_size))
+    c = filter(lambda x: x not in exhaust, cycle(indices))
+    for i in range(total_size):
+        p = next(positional)
+        i = next(c)
+        if groups[i]:
+            output.append(groups[i].pop())
+        else:
+            exhaust.add(i)
+            indices = [i for i in indices[p:] + indices[:p] if i not in exhaust]
+            output += _select_from_groups_gather_all(groups, indices, exhaust, output)
+            # Handle some repeated appending from the recursion
+            # there's definitely a smart way of doing this.
+            return output[:total_size]
+    return output
+
+
 def _select_from_groups(groups, indices, exclude_tail=False, complete_current=False):
     """Return an iterator collecting the members of the subgroups, note
     that the return is simply the index of the group to select from so that
@@ -75,7 +101,7 @@ def _select_from_groups(groups, indices, exclude_tail=False, complete_current=Fa
     in memory, should lengths be calculated another way, estimated or another
     calculation / representation would be approrpiate.
     """
-    exhaust = ()
+    exhaust = []
     group_size = len(indices)
     positional = cycle(range(group_size))
     s = tuple(iter(g) for g in groups)
@@ -86,10 +112,9 @@ def _select_from_groups(groups, indices, exclude_tail=False, complete_current=Fa
             i = next(c)
             yield next(s[i])
         except StopIteration:
-            exhaust += (i,)
+            exhaust.append(i)
             if exclude_tail:
                 return
-
             elif complete_current:
                 if p == 0:
                     return
@@ -183,7 +208,7 @@ def group_representation(groups, num_groups, exclusions=set(), randomise=True):
     """Ensures that for each group the same number of members are present
     """
     return _select_from_groups(
-        groups, _representational_indices((len(g) for g in groups), num_groups)
+        groups, tuple(_representational_indices((len(g) for g in groups), num_groups))
     )
 
 
