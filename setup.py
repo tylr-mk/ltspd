@@ -15,7 +15,7 @@ if __name__ == "__main__":
             "Programming Language :: Python :: 3.7.4",
         ],
         packages=find_packages(exclude=["tests*"]),
-        install_requires=["numpy"],
+        install_requires=["numpy", "attrs"],
         tests_require=[
             # Don't add anything in here, put it under the 'test' section of
             # extras_require instead.  https://github.com/pypa/pip/issues/1197

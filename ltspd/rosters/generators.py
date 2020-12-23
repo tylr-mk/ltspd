@@ -8,6 +8,7 @@ is to manually edit them.
 """
 from itertools import chain, islice
 
+from ltspd.models import InventoryAssignment
 from ltspd.rosters.decorators import retry_roster
 from ltspd.utils import grouper
 
@@ -81,3 +82,22 @@ def generate_mixed_size_roster(
             for participant_count, num in group_schedule
         )
     )
+
+
+@retry_roster()
+def assign_inventory_things(
+    participants, inventory_things, exclusions=set(), randomise=False
+):
+    participants = iter(participants)
+    return chain(
+        *[
+            [
+                InventoryAssignment(
+                    inventory_thing=inventory_thing, 
+                    attendees=list(assigned)
+                ) for assigned in islice(grouper(participants, inventory_thing.inventory.capacity), inventory_thing.inventory.number)
+            ] for inventory_thing in inventory_things
+        ]
+    )
+
+

@@ -201,7 +201,7 @@ def even_spread_mix(groups):
     Example: ((1,2,3,4),(a,b)) >> (1,2,a,3,4,b)
     """
     groups.sort(key=len, reverse=True)
-    return _select_from_groups(groups, _proportional_indices((len(g) for g in groups)))
+    return _select_from_groups_gather_all(groups, _proportional_indices((len(g) for g in groups)))
 
 
 def group_representation(groups, num_groups, exclusions=set(), randomise=True):
