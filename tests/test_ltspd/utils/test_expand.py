@@ -74,7 +74,7 @@ def test_cycle_positions(positions, expected):
     assert tuple(cycle_positions(positions)) == expected
 
 
-@pytest.mark.parametrize("positions", (i for i in range(-5, 1)))
+@pytest.mark.parametrize("positions", range(-5, 1))
 def test_cycle_positions_errors(positions):
     """Errors are raised from first out of the generator if the positions arg
     is 0 or less"""

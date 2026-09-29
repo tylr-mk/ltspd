@@ -1,2 +1,60 @@
+[project]
+name = "ltspd"
+version = "0.1.0"
+description = "Rosters, schedules, and leagues for grouping participants into activities"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Mike Taylor", email = "tylr.mk@gmail.com" }]
+requires-python = ">=3.14"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+    "attrs>=26.1.0",
+    "networkx>=3.7",
+]
+
+[dependency-groups]
+dev = [
+    "black>=26.5.1",
+    "ipdb>=0.13.13",
+    "ipython>=9.17.1",
+    "isort>=9.0.2",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.16.9",
+]
+
+[build-system]
+requires = ["uv_build>=0.12,<0.13"]
+build-backend = "uv_build"
+
 [tool.black]
 line-length = 90
+target-version = ["py314"]
+
+[tool.isort]
+profile = "black"
+line_length = 90
+known_first_party = ["ltspd"]
+
+[tool.ruff]
+line-length = 90
+target-version = "py314"
+
+[tool.ruff.lint]
+# pycodestyle, pyflakes, bugbear, pyupgrade, comprehensions, simplify.
+# Import ordering is owned by isort and formatting by black.
+select = ["E", "W", "F", "B", "UP", "C4", "SIM"]
+# SIM105: contextlib.suppress around a yield obscures generator control flow.
+ignore = ["E501", "SIM105"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-ra", "--strict-markers", "--import-mode=importlib"]
+
+[tool.coverage.run]
+source = ["ltspd"]
+branch = true

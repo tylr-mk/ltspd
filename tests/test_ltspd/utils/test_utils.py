@@ -31,7 +31,7 @@ def test_grouper(participants, group_size):
 def test_random_string(n):
     r = random_string(n)
     assert len(r) == n
-    assert type(r) == str
+    assert isinstance(r, str)
 
 
 bad_apples = {1, 2, 3, 4, 5}
@@ -53,7 +53,7 @@ def test_filter_second_axes(feature, expected):
 @pytest.mark.parametrize("n", range(1, 10))
 def test_shuffle_second_axis(n):
     e = set(range(n))
-    feature = list(list(range(n)) for _ in range(0, 5))
+    feature = [list(range(n)) for _ in range(0, 5)]
     shuffle_second_axis(feature)
     for r in feature:
         assert not e - set(r)

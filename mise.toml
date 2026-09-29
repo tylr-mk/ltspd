@@ -1,0 +1,37 @@
+[tools]
+python = "3.14"
+uv = "latest"
+
+[env]
+_.python.venv = { path = ".venv", create = false }
+
+[tasks.sync]
+description = "Install the package and dev dependencies into .venv"
+run = "uv sync"
+
+[tasks.format]
+description = "Format with black and isort"
+run = [
+    "uv run isort src tests",
+    "uv run black src tests",
+]
+
+[tasks.lint]
+description = "Check formatting and lint with ruff"
+run = [
+    "uv run isort --check-only --diff src tests",
+    "uv run black --check src tests",
+    "uv run ruff check src tests",
+]
+
+[tasks.test]
+description = "Unit tests with coverage"
+run = "uv run pytest --cov --cov-report=term-missing:skip-covered"
+
+[tasks.build]
+description = "Build sdist and wheel into dist/"
+run = "uv build"
+
+[tasks.check]
+description = "Everything CI would run"
+depends = ["lint", "test"]
