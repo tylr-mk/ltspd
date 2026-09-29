@@ -197,3 +197,13 @@ def test_remove_back_to_backs_extra(schedule, tail, expected):
     r = tuple(remove_back_to_backs(schedule))[-tail:]
     for e in expected:
         assert e in r
+
+
+def test_break_up_schedule():
+    assert tuple(break_up("abcde", (2, 1))) == ("a", "b", None, "c", None, "d", "e")
+
+
+def test_remove_back_to_backs_does_not_mutate():
+    schedule = [(1, 0), (1, 0), (2, 3), (4, 5)]
+    remove_back_to_backs(schedule)
+    assert schedule == [(1, 0), (1, 0), (2, 3), (4, 5)]
